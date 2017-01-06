@@ -1,0 +1,28 @@
+body
+{
+	/*font-size: 0;*/
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+tpl_replace,
+echo_replace
+{
+	display:none!important;
+}
+
+.v-align-m
+{
+	vertical-align: middle;
+	width: 0;
+	height: 100%;
+	display: inline-block;
+}
+
+[cursor="pointer"]
+{
+	cursor: pointer;
+}
