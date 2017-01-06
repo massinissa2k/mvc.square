@@ -1,0 +1,43 @@
+{
+  "name": "gulptest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-autoprefixer": "latest",
+    "gulp-clean": "latest",
+    "gulp-concat": "latest",
+    "gulp-cssbeautify": "latest",
+    "gulp-csscomb": "latest",
+    "gulp-csso": "latest",
+    "gulp-help": "latest",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-jsonminify": "latest",
+    "gulp-load-plugins": "latest",
+    "gulp-minify": "latest",
+    "gulp-plumber": "latest",
+    "gulp-preprocess": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "gulp-watch": "latest",
+    "minimist": "latest"
+  },
+  "dependencies": {
+    "easyimage": "^2.1.0",
+    "glob-fs": "latest",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-gm": "0.0.8",
+    "gulp-sync": "latest",
+    "uniqid": "latest",
+    "util": "latest",
+    "xmldom": "latest",
+    "xpath": "latest"
+  }
+}

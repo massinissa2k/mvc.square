@@ -1,0 +1,27 @@
+Tuto
+http://www.alsacreations.com/tuto/lire/1686-introduction-a-gulp.html
+
+https://www.npmjs.com/package/gulp-gm
+brew install imagemagick
+brew install graphicsmagick
+
+npm init
+npm install gulp --save-dev
+
+package.json
+{
+  "name": "projet",
+  "version": "0.0.1",
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-load-plugins": "latest",
+    "gulp-rename": "latest",
+    "gulp-csso": "latest",
+    "gulp-sass": "latest",
+    "gulp-csscomb": "latest",
+    "gulp-cssbeautify": "latest",
+    "gulp-autoprefixer": "latest"
+  }
+}
+
+npm install
