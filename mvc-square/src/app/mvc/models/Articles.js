@@ -1,12 +1,11 @@
-models.Article = function ()
-{
-	var _construct = function ( parent )
-	{
-		this.parent = parent;
-	};
-
-	var proto = _construct.prototype;
+models.Article = function() {
 	
+	class Article extends Model{
+		constructor(parent){
+			super();
+			this.parent = parent;
+		}
+	}
 
-	return _construct;
+	return Article;
 }();

@@ -1,0 +1,17 @@
+controllers.Page = function()
+{
+	var _construct = function( parent , tmplEngine )
+	{
+		this.parent = parent;
+		this.tmplEngine = tmplEngine;
+	};
+
+	var proto = _construct.prototype;
+
+	proto.onCreate = function( domPositionElem , data , next )
+	{
+		return false;
+	};
+
+	return _construct;
+}();

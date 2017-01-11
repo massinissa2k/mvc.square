@@ -1,11 +1,6 @@
 controllers.MainView = function()
 {
-	var _construct = function( parent , tmplEngine , route )
-	{
-		this.parent = parent;
-		this.tmplEngine = tmplEngine;
-	};
+	class MainView extends controllers.Default{}
 
-	var proto = _construct.prototype;
-	return _construct;
+	return MainView;
 }();
