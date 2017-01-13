@@ -1,7 +1,7 @@
-var plugins = require("gulp-load-plugins")();
+const plugins = require("gulp-load-plugins")();
 
-var initTask = function(taskArgs) {
-	taskArgs.gulp.task("cssminLocal", function() {
+const initTask = function(taskArgs) {
+	taskArgs.gulp.task("cssminLocal", () => {
 		return taskArgs.gulp.src(taskArgs.ARBO.dist.cssMin)
 			.pipe(plugins.csso())
 			.pipe(plugins.rename("min.css"))

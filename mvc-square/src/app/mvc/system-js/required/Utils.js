@@ -5,13 +5,16 @@ var Utils = function() {
 
 	var proto = _construct.prototype;
 
-	proto.uniqid = function() {
-		var uniqid = 0;
+	proto.uid = function() {
+		var uid = 0;
 		return function() {
-			uniqid++;
-			return Date.now() + "_" + uniqid++;
+			return uid++;
 		}
 	}();
+
+	proto.uniqid = function() {
+		return Date.now() + "_" + this.uid();
+	};
 
 	proto._ajax = function() {
 		var _xhr = null;

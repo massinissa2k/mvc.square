@@ -1,7 +1,7 @@
 const glob = require('glob');
 const fs = require("fs");
 const initTask = function(taskArgs) {
-	taskArgs.gulp.task("regExpFinalTemplates", function(done) {
+	taskArgs.gulp.task("regExpFinalTemplates", (done) => {
 		done();
 		return;
 		rewriteFiles(done);

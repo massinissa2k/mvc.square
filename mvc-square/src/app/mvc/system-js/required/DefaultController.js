@@ -1,11 +1,54 @@
 controllers.DefaultController = controllers.Default = function() {
 
+	function setEventsObject(ctx){
+		ctx.evtOnCreate = {
+			type:"onCreate",
+			target:null,
+			context:ctx
+		};
+
+		ctx.evtOnShow = {
+			type:"onShow",
+			target:null,
+			context:ctx
+		};
+
+		ctx.evtOnSwapViewIn = {
+			type:"onSwapViewIn",
+			target:null,
+			context:ctx
+		};
+
+		ctx.evtOnSwapViewOut = {
+			type:"onSwapViewOut",
+			target:null,
+			context:ctx
+		};
+	} 
+
+	function fireEvent(ctx, evtObject, next){
+		next();
+		ctx.events.fire(evtObject);
+		ctx.events.removeListener(evtObject.type, null);
+	}
+
+	function fireSwapViewOut(ctx, next){
+		ctx.events.fire(ctx.evtOnSwapViewOut);
+		next();
+		ctx.events.removeListener(ctx.evtOnSwapViewOut.type, null);
+	}
+
 	class DefaultController{
 		constructor(parent){
 			this.parent = parent;
 			this.ctId = null;
 			this.templateElement = null;
+			//this.htmlElement = document.createElement("div");
 			this.htmlElement = null;
+
+			this.evtBeforeCreate = null;
+			setEventsObject(this);
+			this.events = new EventManager();
 		}
 
 		__init__(templateElement, data, next){
@@ -18,8 +61,9 @@ controllers.DefaultController = controllers.Default = function() {
 
 		beforeCreate(templateElement, data, next){
 			this.templateElement = templateElement;
-			if (this.onCreate(templateElement, data, next) !== false) {
-				next();
+
+			if (this.onCreate(templateElement, data, fireEvent.bind(null, this, this.evtOnCreate, next) ) !== false) {
+				fireEvent(this, this.evtOnCreate, next);
 				return;
 			}
 			return;
@@ -29,24 +73,25 @@ controllers.DefaultController = controllers.Default = function() {
 			this.htmlElement = htmlElement;
 			this.templateElement = templateElement;
 
-			if (this.onShow(templateElement, htmlElement, data, next) !== false) {
-				next();
+			if (this.onShow(templateElement, htmlElement, data, fireEvent.bind(null, this, this.evtOnShow, next)) !== false) {
+				fireEvent(this, this.evtOnShow, next);
 				return;
 			}
 			return;
 		}
 
 		beforeSwapViewIn(oldController, next) {
-			if (this.onSwapViewIn(oldController, oldController.beforeSwapViewOut.bind(oldController, this, next)) !== false) {
-				oldController.beforeSwapViewOut(this, next);
+
+			if (this.onSwapViewIn(oldController, fireEvent.bind(null, this, this.evtOnSwapViewIn, oldController.beforeSwapViewOut.bind(oldController, this, next) )) !== false) {
+				fireEvent(this, this.evtOnSwapViewIn, oldController.beforeSwapViewOut.bind(oldController, this, next) );
 				return;
 			}
 			return;
 		}
 
 		beforeSwapViewOut(newController, next) {
-			if (this.onSwapViewOut(newController, next) !== false) {
-				next();
+			if (this.onSwapViewOut(newController, fireSwapViewOut.bind(null, this, next)) !== false) {
+				fireSwapViewOut(this, next);
 				return;
 			}
 			return;
@@ -57,7 +102,6 @@ controllers.DefaultController = controllers.Default = function() {
 		}
 
 		onShow(tmpl, htmlElement, data, next) {
-			//console.log(this.htmlElement);
 			return true;
 		}
 

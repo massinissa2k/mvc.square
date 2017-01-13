@@ -1,26 +1,25 @@
 var UrlManager = function() {
-	var _construct = function(parent, route) {
-		this.route = route;
-		this.routeLength = route.length;
-		this.lastResStr = null;
-		this.lastRes = null;
-		this.lastInput = null;
-		this.currentHash = null;
-		this.lastHash = null;
-		this.groupeOfRoute = null;
-		this.groupeOfRouteL = 0;
-		this.setCurrentHash();
-	};
 
-	var proto = _construct.prototype;
+	class UrlManager{
+		constructor(parent, route){
+			this.route = route;
+			this.routeLength = route.length;
+			this.lastResStr = null;
+			this.lastRes = null;
+			this.lastInput = null;
+			this.currentHash = null;
+			this.lastHash = null;
+			this.groupeOfRoute = null;
+			this.groupeOfRouteL = 0;
+			this.setCurrentHash();
+		}
 
-	proto.setCurrentHash = function() {
-		var currentHash = null;
-		var lastHash = null;
-		var groupeOfRoute = null;
-		var groupeOfRouteL = null;
+		setCurrentHash(){
+			var currentHash = null;
+			var lastHash = null;
+			var groupeOfRoute = null;
+			var groupeOfRouteL = null;
 
-		return function() {
 			currentHash = window.location.hash;
 
 			if (currentHash !== null && currentHash === lastHash) {
@@ -40,24 +39,18 @@ var UrlManager = function() {
 			lastHash = currentHash;
 			return;
 		}
-	}();
 
-	proto.getNewParamsFromHash = function() {
-		var res = null;
-		var currRes = null;
-		var currResStr = null;
-		var L = null;
-		var i = null;
-		var resList = null;
-		var origRes = null;
-		return function(getOrig) {
+		getNewParamsFromHash(getOrig){
+			var res = null;
+			var currRes = null;
+			var currResStr = null;
+			var resList = null;
+			var origRes = null;
+
 			this.setCurrentHash();
-			currRes = null;
 			this.lastRes = null;
-			L = this.routeLength;
-			i = 0;
-			resList = null;
-			origRes = null;
+			var i = 0;
+			var L = this.routeLength;
 
 			for (; i < L; i++) {
 				res = this.checkOnGet(this.route[i]);
@@ -85,7 +78,6 @@ var UrlManager = function() {
 				currResStr = null;
 			}
 
-
 			if (this.lastResStr === currResStr) {
 				return false;
 			}
@@ -93,24 +85,16 @@ var UrlManager = function() {
 			this.lastResStr = currResStr;
 
 			return resList;
-
 		}
-	}();
 
-	proto.getNewParamsFromLocal = function() {
-		var res = null;
-		var currRes = null;
-		var currResStr = null;
-		var L = null;
-		var i = null;
-		var resList = null;
-		var origRes = null;
-		return function(from) {
-			currRes = null;
-			L = this.routeLength;
-			i = 0;
-			resList = null;
-			origRes = null;
+		getNewParamsFromLocal(from){
+			var res = null;
+			var currRes = null;
+			var currResStr = null;
+			var L = this.routeLength;
+			var i = 0;
+			var resList = null;
+			var origRes = null;
 
 			for (; i < L; i++) {
 				res = this.checkOnGetLocal(this.route[i], from);
@@ -128,12 +112,11 @@ var UrlManager = function() {
 
 			return origRes;
 		}
-	}();
 
-	proto.checkOnGet = function() {
-		var J = null;
-		var res = null;
-		return function(routeArr) {
+		checkOnGet(routeArr){
+			var J = null;
+			var res = null;
+
 			for (J in routeArr.onGet) {
 				res = this.getUrlHash(routeArr.onGet[J]);
 
@@ -144,12 +127,10 @@ var UrlManager = function() {
 
 			return null;
 		}
-	}();
 
-	proto.checkOnGetLocal = function() {
-		var J = null;
-		var res = null;
-		return function(routeArr, from) {
+		checkOnGetLocal(routeArr, from){
+			var J = null;
+			var res = null;
 			for (J in routeArr.onGet) {
 				res = this.getLocalHash(routeArr.onGet[J], from);
 
@@ -160,24 +141,16 @@ var UrlManager = function() {
 
 			return null;
 		}
-	}();
 
-	proto.checkIt = function(name, from) {
-		return from.match(new RegExp(name));
-	};
+		checkIt(name, from){
+			return from.match(new RegExp(name));
+		}
 
-	proto.getLocalHash = function() {
-		var results = null;
-		var i = 0;
-		var fromL = null;
-		var fromArr = null;
-
-		return function(name, from) {
-			results = null;
-			i = 0;
-
-			fromArr = from.split("&");
-			fromL = fromArr.length;
+		getLocalHash(name, from){
+			var results = null;
+			var i = 0;
+			var fromArr = from.split("&");
+			var fromL = fromArr.length;
 
 			for (; i < fromL; i++) {
 				results = this.checkIt(name, fromArr[i]);
@@ -189,22 +162,17 @@ var UrlManager = function() {
 
 			return results;
 		}
-	}();
 
-	proto.getUrlHash = function() {
-		var results = null;
-		var i = 0;
-		var outNull = null;
-		return function(name) {
+		getUrlHash(name){
+			var results = null;
+			var i = 0;
+
 			if (name === "") {
-				outNull = [""];
+				var outNull = [""];
 				outNull.index = 0;
 				outNull.input = "";
 				return outNull;
 			}
-
-			results = null;
-			i = 0;
 
 			for (; i < this.groupeOfRouteL; i++) {
 				results = this.checkIt(name, this.groupeOfRoute[i]);
@@ -216,17 +184,11 @@ var UrlManager = function() {
 
 			return results;
 		}
-	}();
 
-	proto.switchUrl = function() {
-		var p = null;
-		var resList = null;
-		var resList2 = null;
-		return function(path) {
-			p = null;
-
-			resList = this.getNewParamsFromLocal(path);
-			resList2 = this.getNewParamsFromHash(true);
+		switchUrl(path){
+			var p = null;
+			var resList = this.getNewParamsFromLocal(path);
+			var resList2 = this.getNewParamsFromHash(true);
 
 			if (resList !== null && resList2 !== null) {
 				window.location.hash = window.location.hash.replace(resList2.input, path);
@@ -246,12 +208,12 @@ var UrlManager = function() {
 
 			return;
 		}
-	}();
 
-	proto.switchUrlAll = function(path) {
-		window.location.hash = path;
-	};
+		switchUrlAll(path){
+			window.location.hash = path;
+		}
+	}
 
-	return _construct;
+	return UrlManager;
 }();
 mvc.UrlManager = UrlManager;

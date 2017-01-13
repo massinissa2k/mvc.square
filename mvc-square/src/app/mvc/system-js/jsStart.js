@@ -1,10 +1,8 @@
 (function() {
 	"use strict";
 	var __GLOBALS__ = {};
-
 	var _CONFIG = null;
 	var _UTILS = null;
-	//var controllers 	= { Default : function(){} };
 	var controllers = {};
 	var models = {};
 	var mvc = {
@@ -15,15 +13,10 @@
 		models: models,
 		routes: null,
 		model: null,
-		lng: null //default acces to get trad by key that can be changed from const.js
-			,
+		lng: null,//default acces to get trad by key that can be changed from const.js
 		userAgent: null,
 		noClickable: false
 	};
-
-	function mvcPublic(proto, functionName, _function_) {
-		proto[functionName] = _function_;
-	}
 
 	var getWinMvc = function() {
 		window.accessMVC = window.accessMVC || [];
@@ -34,27 +27,6 @@
 			return "window.accessMVC[" + MVCID + "]";
 		}
 
-	}();
-
-	var _extends_ = function() {
-		var J = null;
-		return function(proto, obj, ifNotExist) {
-			if (ifNotExist === true) {
-				for (J in obj) {
-					if (typeof(proto[J]) === "undefined") {
-						proto[J] = obj[J];
-					}
-				}
-
-				return;
-			}
-
-			for (J in obj) {
-				proto[J] = obj[J];
-			}
-
-			return;
-		}
 	}();
 
 	function DEBUG_WARN() {

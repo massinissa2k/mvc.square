@@ -1,22 +1,21 @@
 var RouteManager = function() {
-	var _construct = function(parent, route, routeName) {
-		this.parent = parent;
-		this.route = route;
-		this.routeLength = route.length;
-		this.urlManager = new UrlManager(this, this.route);
-		this.routeName = routeName;
-		this.controllers = {};
-		this.lastHash = null;
-	};
 
-	var proto = _construct.prototype;
+	class RouteManager{
+		constructor(parent, route, routeName){
+			this.parent = parent;
+			this.route = route;
+			this.routeLength = route.length;
+			this.urlManager = new UrlManager(this, this.route);
+			this.routeName = routeName;
+			this.controllers = {};
+			this.lastHash = null;
+		}
+		
+		hashchange() {
+			var J = null;
+			var ressourcesStats = null;
+			var resList = null;
 
-	proto.hashchange = function() {
-		var J = null;
-		var ressourcesStats = null;
-		var resList = null;
-
-		return function() {
 			ressourcesStats = null;
 
 			resList = this.urlManager.getNewParamsFromHash();
@@ -39,65 +38,65 @@ var RouteManager = function() {
 				}
 			}
 
-			this.cleanControllers();
-
+			this.cleanControllers();	
 		}
-	}();
 
-	proto.swapView = function() {
-		var ct = null;
-		return function(i, newDataController, res) {
+		swapView(i, newDataController, res) {
+			var ct = null;
+
 			ct = this.parent.tmplEngine.getHtml(newDataController.template, {
 				"__param__": res[1]
 			}, mvc.controllers[newDataController.controller], null, true);
+			
 			if (this.controllers[i] !== null) {
-				ct.beforeSwapViewIn(this.controllers[i], this.onSwapView.bind(this, i, ct));
+				this.beforeSwapViewIn(i, ct);
+				//ct.beforeSwapViewIn(this.controllers[i], this.onSwapView.bind(this, i, ct));
 			}
 		}
-	}();
 
-	proto.swapViewOut = function() {
-		var ct = null;
-		return function(i) {
-			ct = this.parent.tmplEngine.getHtml(null, null, null, this.routeName, true);
+		swapViewOut(i){
+			var ct = this.parent.tmplEngine.getHtml(null, null, null, this.routeName, true);
 			if (this.controllers[i] !== null) {
-				ct.beforeSwapViewIn(this.controllers[i], this.onSwapView.bind(this, i, ct));
+				this.beforeSwapViewIn(i, ct);
+				//ct.beforeSwapViewIn(this.controllers[i], this.onSwapView.bind(this, i, ct));
 			}
 		}
-	}();
 
-	proto.onSwapView = function(oldCtPosI, ct) {
-		if (this.controllers[oldCtPosI].htmlElement.parentElement === null) {
-			this.controllers[oldCtPosI] = null;
-			delete this.controllers[oldCtPosI];
+		onSwapView(oldCtPosI, ct){
+			if (this.controllers[oldCtPosI].htmlElement.parentElement === null) {
+				this.controllers[oldCtPosI] = null;
+				delete this.controllers[oldCtPosI];
+				return;
+			}
+
+			ct.events.addListener("onShow", this.onShow.bind(this, ct, oldCtPosI));
 			return;
 		}
 
-		this.controllers[oldCtPosI].htmlElement.parentElement.replaceChild(ct.htmlElement, this.controllers[oldCtPosI].htmlElement);
-		this.controllers[oldCtPosI] = null;
-		delete this.controllers[oldCtPosI];
-		this.controllers[ct.ctId] = ct;
+		onShow(ct, oldCtPosI){
+			this.controllers[oldCtPosI].htmlElement.parentElement.replaceChild(ct.htmlElement, this.controllers[oldCtPosI].htmlElement);
+			this.controllers[oldCtPosI] = null;
+			delete this.controllers[oldCtPosI];
+			this.controllers[ct.ctId] = ct;
+		}
 
-		return;
-	};
+		beforeSwapViewIn(oldCtPosI, ct){
+			ct.beforeSwapViewIn(this.controllers[oldCtPosI], this.onSwapView.bind(this, oldCtPosI, ct));
+		}
 
-	proto.cleanControllers = function() {
-		var J = null;
-		return function() {
-
+		cleanControllers(){
+			var J = null;
 			for (J in this.controllers) {
 				if (this.controllers[J] === null) {
-					delete(this.controllers[J]);
+					delete this.controllers[J];
 				}
 			}
-
-			J = null;
 		}
-	}();
 
-	proto.manage = function(controller, routeName) {
-		this.controllers[controller.ctId] = controller;
-	};
+		manage(controller, routeName){
+			this.controllers[controller.ctId] = controller;
+		}
+	}
 
-	return _construct;
+	return RouteManager;
 }();

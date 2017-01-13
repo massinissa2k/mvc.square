@@ -1,15 +1,16 @@
-var clean = require('gulp-clean');
+const clean = require('gulp-clean');
 
-var initTask = function( taskArgs )
-{
-	taskArgs.gulp.task( "clean", function()
-	{
-		return taskArgs.gulp.src( taskArgs.ARBO.dist.appDir  , {read: false} )
-			.pipe(clean( { force: true }) );
+const initTask = function(taskArgs) {
+	taskArgs.gulp.task("clean", () => {
+		return taskArgs.gulp.src(taskArgs.ARBO.dist.appDir, {
+				read: false
+			})
+			.pipe(clean({
+				force: true
+			}));
 	});
 };
 
-module.exports =
-{
-	initTask : initTask
+module.exports = {
+	initTask: initTask
 };
