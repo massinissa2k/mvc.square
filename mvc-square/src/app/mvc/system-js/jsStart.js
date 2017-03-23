@@ -41,7 +41,12 @@
 	// @exec include("controllers/**/*.js") 
 	// @exec include("models/**/*.js") 
 	// @exec include("config/**/*.js") 
-
 	_UTILS = new Utils();
 	mvc.utils = _UTILS;
+	// @exec include("jsx-js/**/*.js")
+	setTimeout( function(){
+		var JsInterface = JSX.require("JsInterface.jsx").JsInterface;
+		var obj = new JsInterface();
+		console.log(obj);
+	},200);
 })();

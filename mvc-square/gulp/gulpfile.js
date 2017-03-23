@@ -1,25 +1,25 @@
 //var gulp = require('gulp-help')(require('gulp'));
-var gulp = require('gulp');
-var gutil = require("gulp-util");
-var util = require("util");
-var tasksPath = __dirname + '/classes/tasks/';
-var configPath = __dirname + '/classes/config.js';
-var config = require(configPath);
-var options = require("minimist")(process.argv.slice(2));
+const gulp = require('gulp');
+const gutil = require("gulp-util");
+const util = require("util");
+const tasksPath = __dirname + '/classes/tasks/';
+const configPath = __dirname + '/classes/config.js';
+const config = require(configPath);
+const options = require("minimist")(process.argv.slice(2));
 
-var onErrors = function(err) {
+const onErrors = function(err) {
 	gutil.beep();
 	gutil.log(err);
 };
 
-var ulog = function(obj, depth) {
+const ulog = function(obj, depth) {
 	console.log(util.inspect(obj, false, depth, true));
 };
 
 global.ulog = ulog;
-global.MVC_IS_DEBUG_MODE = "false";
+global.MVC_IS_DEBUG_MODE = "true";
 
-var taskArgs = {
+const taskArgs = {
 	gulp: gulp,
 	config: config,
 	ARBO: config.ARBO,
@@ -27,7 +27,7 @@ var taskArgs = {
 	onErrors: onErrors
 }
 
-var tasks = {};
+const tasks = {};
 tasks.clean = require(tasksPath + "/clean.js");
 tasks.duplicateAssets = require(tasksPath + "/duplicateAssets.js");
 tasks.optimizeImages = require(tasksPath + "/optimizeImages.js");
@@ -40,14 +40,20 @@ tasks.cssmin = require(tasksPath + "/cssmin.js");
 tasks.templateJstMap = require(tasksPath + "/templateJstMap.js");
 tasks.scriptsJs = require(tasksPath + "/scriptsJs.js");
 tasks.scriptsJsMin = require(tasksPath + "/scriptsJsMin.js");
+tasks.es6Js = require(tasksPath + "/es6Js.js");
 
 Object.keys(tasks).forEach((key) => {
 	tasks[key].initTask(taskArgs);
 });
 
-var toWatchJSDev = [
+const toWatchES6Dev = [
+	config.ARBO.src.appMvc + "Core.js",
+	config.ARBO.src.appMvc + "core-js/**/*.js"
+];
+
+const toWatchJSDev = [
 	config.ARBO.src.appMvc + "config/*.js",
-	"!"+config.ARBO.src.appMvc + "config/templates.js",
+	"!" + config.ARBO.src.appMvc + "config/templates.js",
 	config.ARBO.src.appMvc + "controllers/*.js",
 	config.ARBO.src.appMvc + "controllers/**/*.js",
 	config.ARBO.src.appMvc + "lib-js/*.js",
@@ -57,19 +63,25 @@ var toWatchJSDev = [
 	config.ARBO.src.appMvc + "system-js/*.js",
 	config.ARBO.src.appMvc + "system-js/**/*.js"
 ];
-var toWatchDevScss = [
+
+const toWatchDevScss = [
 	config.ARBO.src.scssDir + "*.scss",
 	config.ARBO.src.scssDir + "**/*.scss"
 ];
 
-var toWatchDev = [
+const toWatchDev = [
 	config.ARBO.src.appDir + "index.html",
 	toWatchDevScss,
 	config.ARBO.src.templatesJst,
 	toWatchJSDev,
 ];
 
-var debugSeries = gulp.series("getIndexhtml",
+gulp.task("switchToProd", (done) => {
+	MVC_IS_DEBUG_MODE = "false";
+	done();
+});
+
+const debugSeries = gulp.series("getIndexhtml",
 	"css",
 	"duplicateAssets",
 	"duplicateLanguages",
@@ -81,7 +93,8 @@ var debugSeries = gulp.series("getIndexhtml",
 		done();
 	});
 
-var buildSeries = gulp.series("getIndexhtml",
+const buildSeries = gulp.series("getIndexhtml",
+	"switchToProd",
 	"cssmin",
 	"duplicateAssets",
 	"optimizeImages",
@@ -94,7 +107,7 @@ var buildSeries = gulp.series("getIndexhtml",
 		done();
 	});
 
-var watchSeries = gulp.series("getIndexhtml",
+const watchSeries = gulp.series("getIndexhtml",
 	"css",
 	"duplicateAssets",
 	"duplicateLanguages",
@@ -113,12 +126,16 @@ gulp.task("debug", debugSeries);
 
 gulp.task("watch", watchSeries);
 
-gulp.task("watchcss",()=>{
+gulp.task("watchcss", () => {
 	gulp.watch(toWatchDevScss, gulp.parallel("css"));
 });
 
-gulp.task("watchjs",()=>{
+gulp.task("watchjs", () => {
 	gulp.watch(toWatchJSDev, gulp.parallel(["scriptsJs"]));
+});
+
+gulp.task("watchEs6", () => {
+	gulp.watch(toWatchES6Dev, gulp.parallel(["es6Js"]));
 });
 
 //gulp.task("default", ["help"]);
