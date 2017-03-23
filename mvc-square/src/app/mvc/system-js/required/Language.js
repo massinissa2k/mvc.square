@@ -47,7 +47,7 @@ var Language = function() {
 		}
 
 		getLngByName(name) {
-			if (this.data[name] !== "undefined") {
+			if (this.data[name] !== undefined) {
 				return this.data[name];
 			}
 			return name;
