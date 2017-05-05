@@ -18,7 +18,8 @@ var TmplContext = function(){
 
 			this[_CONST.LNG.tmplKey] = mvc.lng;
 
-			return new Function("mvc", "_$_", plainText).bind(this, mvc);
+			this.tjs = new Tjs();
+			return new Function("mvc", "_$_", this.tjs.build(plainText) ).bind(this, mvc);
 		}
 
 		goto(path, routeGroupe){

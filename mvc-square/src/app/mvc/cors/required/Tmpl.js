@@ -1,8 +1,4 @@
 var Tmpl = function() {
-	
-	var _open = "<%";
-	var _close = "%>";
-	var htmlIds = 0;
 	var htmlreplaceable = null;
 
 	var hiddenHtml = "<tpl_replace></tpl_replace>";
@@ -21,7 +17,6 @@ var Tmpl = function() {
 			this.main = this.parent;
 			this.tmplHelpers = tmplHelpers;
 			this.mvcController = null;
-			this.buffer = "";
 			this.templatesList = templatesList;
 			this.templatesReady = {};
 			this.onLoadFile = this.onLoadFile_.bind(this);
@@ -97,10 +92,6 @@ var Tmpl = function() {
 			Promise.all(ps).then(this.onPromiseThen.bind(this)).catch(this.onPromiseError.bind(this));
 		}
 
-		_echo_(str){
-			this.buffer += str + ";";
-		}
-
 		pushHtmlElement(elem){
 			var htmlId = "htmlreplace_" + (_UTILS.uid());
 			this.htmlElementList[htmlId] = elem;
@@ -126,7 +117,8 @@ var Tmpl = function() {
 				return true;
 			}
 
-			new TmplBuilder(this, id, str, rebuild, htmlreplaceable);
+			
+			this.saveById[id] = new TmplContext(this, str, htmlreplaceable);
 			return true;
 		}
 

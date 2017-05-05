@@ -60,8 +60,8 @@ const toWatchJSDev = [
 	config.ARBO.src.appMvc + "lib-js/**/*.js",
 	config.ARBO.src.appMvc + "models/*.js",
 	config.ARBO.src.appMvc + "models/**/*.js",
-	config.ARBO.src.appMvc + "system-js/*.js",
-	config.ARBO.src.appMvc + "system-js/**/*.js"
+	config.ARBO.src.appMvc + "cors/*.js",
+	config.ARBO.src.appMvc + "cors/**/*.js"
 ];
 
 const toWatchDevScss = [

@@ -1,1 +1,1 @@
-/* @include system-js/jsStart.js */
+/* @include cors/jsStart.js */
