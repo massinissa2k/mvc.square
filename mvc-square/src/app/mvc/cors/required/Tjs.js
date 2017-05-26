@@ -1,3 +1,6 @@
+/*
+ * convert hybrid HTML template to js template function 
+ */
 let Tjs = function() {
 	let escapableKeys = ["\n", "\\", "\'"];
 	let escapableValues = ["", "\\\\", "\\'"];

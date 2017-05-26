@@ -19,7 +19,6 @@ var Tmpl = function() {
 			this.mvcController = null;
 			this.templatesList = templatesList;
 			this.templatesReady = {};
-			this.onLoadFile = this.onLoadFile_.bind(this);
 			this.saveById = {};
 			this.next = next;
 			//this._echo_ 			= this._echoBind.bind( this );
@@ -35,61 +34,42 @@ var Tmpl = function() {
 			this.mvcController = mvcController;
 		}
 
-		onLoadFile_(tpl, path, format, args){
-			if (tpl === false) {
-				args.reject('Load Fail! ' + path);
-				return;
-			}
+		buildOut(){
+			setTimeout(()=>{
+				for (var J in this.templatesReady) {
+					this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
+				}
 
-			this.templatesReady[args.id] = {
-				id: args.id,
-				url: args.url,
-				tpl: tpl
-			};
-
-			args.resolve(args.id);
-			return;
-		}
-
-		onPromise(id, url, resolve, reject) {
-			_UTILS.loadFile("text", url, this.onLoadFile, {
-				id: id,
-				url: url,
-				resolve: resolve,
-				reject: reject
-			});
-		}
-
-		buildOutPromise(){
-			for (var J in this.templatesReady) {
-				this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
-			}
-
-			this.next(true);
-		}
-
-		onPromiseThen(){
-			setTimeout(this.buildOutPromise.bind(this), 0);
-		}
-
-		onPromiseError(error){
-			DEBUG_WARN(error);
-			this.next(false);
-		}
-
-		promiseGet(id, url){
-			return new Promise(this.onPromise.bind(this, id, url));
+				this.next(true);
+			},0);
+			
 		}
 
 		buildAll(){
-			var _self = this;
-			var ps = [];
-
-			for (var J in this.templatesList) {
-				ps.push(this.promiseGet(J, this.templatesList[J]));
+			let tmplValues = [];
+			let tmplKeys = [];
+			
+			for(var J in this.templatesList){
+				tmplKeys.push(J);
+				tmplValues.push(this.templatesList[J]);
 			}
 
-			Promise.all(ps).then(this.onPromiseThen.bind(this)).catch(this.onPromiseError.bind(this));
+			let files = new FilesLoader(tmplValues).load();
+			files.then((datas)=>{
+				
+				for(let data in datas){
+					let val = datas[data];
+					this.templatesReady[tmplKeys[tmplValues.indexOf(val[0])]] = {
+		 				id: tmplKeys[tmplValues.indexOf(val[0])],
+		 				url: val[0],
+		 				tpl: val[1]
+		 			};
+				}
+
+				this.buildOut();
+			}).catch((why)=>{
+				DEBUG_WARN(why);
+			});
 		}
 
 		pushHtmlElement(elem){
@@ -117,7 +97,6 @@ var Tmpl = function() {
 				return true;
 			}
 
-			
 			this.saveById[id] = new TmplContext(this, str, htmlreplaceable);
 			return true;
 		}
