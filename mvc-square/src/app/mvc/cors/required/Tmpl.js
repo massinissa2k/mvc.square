@@ -12,10 +12,9 @@ var Tmpl = function() {
 	})();
 
 	class Tmpl{
-		constructor(parent, templatesList, tmplHelpers, next){
+		constructor(parent, templatesList, next){
 			this.parent = parent;
 			this.main = this.parent;
-			this.tmplHelpers = tmplHelpers;
 			this.mvcController = null;
 			this.templatesList = templatesList;
 			this.templatesReady = {};

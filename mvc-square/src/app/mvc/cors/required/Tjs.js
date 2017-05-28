@@ -9,15 +9,14 @@ let Tjs = function() {
 	let getScriptReg = new RegExp("<%([^<][^%]*)%>", "gi");
 
 	class Tjs {
-		constructor() {
-			this.strOut = null;
-			this.buffer = "";
+		constructor(sharedContext) {
+			this.sharedContext = sharedContext||{};
+			this.sharedContext["__MVSbuffer__"] = "";
 		}
 
 		build(strIn) {
 			strIn = strIn.replace(addSlashesReg, this.addSlashes);
-			this.strOut = "this.buffer = \'" + strIn.replace(getScriptReg, this.switchToScript.bind(this)) + "\';return this.buffer;";
-			return this.strOut;
+			return "this.__MVSbuffer__ = \'" + strIn.replace(getScriptReg, this.switchToScript.bind(this)) + "\';return this.__MVSbuffer__;";
 		}
 
 		addSlashes(m) {
@@ -29,11 +28,18 @@ let Tjs = function() {
 		}
 
 		switchToScript(m, script) {
-			return "\';" + (script.trim().replace(stripSlashesReg, "'")) + ";this.buffer += \'";
+			return "\';" + (script.trim().replace(stripSlashesReg, "'")) + ";this.__MVSbuffer__ += \'";
 		}
 
-		compile(strAction, data) {
-			//return new Function(this.strOut || this.build(strAction)).bind(this);
+		bufferAdd(str){
+			this.sharedContext["__MVSbuffer__"] += str;
+		}
+
+		compile(plainText) {
+			return (data)=>{
+				this.sharedContext["data"] = this.sharedContext["_$_"] = data;
+				return new Function( this.build(plainText) ).bind(this.sharedContext)();
+			};
 		}
 	}
 

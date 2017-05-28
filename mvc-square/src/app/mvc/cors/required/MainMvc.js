@@ -38,7 +38,7 @@ window.MainMvc = function() {
 
 		lngReady(e) {
 			mvc.lng = e.data.lng;
-			this.tmplEngine = new Tmpl(this, _CONFIG.getTemplates(), this.tmplHelpers, this.init.bind(this));
+			this.tmplEngine = new Tmpl(this, _CONFIG.getTemplates(), this.init.bind(this));
 
 			setTimeout(function() {
 				this.virtualUrl = new VirtualUrl(this, this.routes, this.tmplEngine);
