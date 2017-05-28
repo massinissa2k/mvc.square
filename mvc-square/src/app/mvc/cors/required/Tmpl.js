@@ -26,25 +26,24 @@ var Tmpl = function() {
 			this.htmlElementList = {};
 			htmlreplaceable = htmlreplaceable || "html" + _UTILS.uniqid();
 
-			this.buildAll();
+			this.loadTemplates(()=>{
+				this.buildTemplates();
+			});
 		}
 
 		setMvcController(mvcController){
 			this.mvcController = mvcController;
 		}
 
-		buildOut(){
-			setTimeout(()=>{
-				for (var J in this.templatesReady) {
-					this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
-				}
+		buildTemplates(){
+			for (var J in this.templatesReady) {
+				this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
+			}
 
-				this.next(true);
-			},0);
-			
+			this.next(true);
 		}
 
-		buildAll(){
+		loadTemplates(next){
 			let tmplValues = [];
 			let tmplKeys = [];
 			
@@ -65,7 +64,7 @@ var Tmpl = function() {
 		 			};
 				}
 
-				this.buildOut();
+				this.next();
 			}).catch((why)=>{
 				DEBUG_WARN(why);
 			});
