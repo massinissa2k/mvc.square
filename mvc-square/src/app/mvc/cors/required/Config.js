@@ -27,7 +27,7 @@ var Config = function(){
 
 		getTemplates() {
 			return this.template;
-		};
+		}
 	}
 	return Config;
 }()

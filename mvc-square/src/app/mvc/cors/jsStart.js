@@ -2,20 +2,20 @@
 	"use strict";
 	var __GLOBALS__ = {};
 	var _CONFIG = null;
-	var _UTILS = null;
+	var _UTILS, Utils, nsUtils;
+	_UTILS = Utils = nsUtils = {};
 	var controllers = {};
 	var models = {};
 	var mvc = {
 		config: _CONFIG,
 		mainMvc: null,
-		utils: null,
+		utils: _UTILS,
 		controllers: controllers,
 		models: models,
 		routes: null,
 		model: null,
-		lng: null,//default acces to get trad by key that can be changed from const.js
+		lng: null,//default access to get the traduction by key, that can be changed from const.js
 		userAgent: null,
-		noClickable: false
 	};
 
 	var getWinMvc = function() {
@@ -41,6 +41,4 @@
 	// @exec include("controllers/**/*.js") 
 	// @exec include("models/**/*.js") 
 	// @exec include("config/**/*.js") 
-	_UTILS = new Utils();
-	mvc.utils = _UTILS;
 })();

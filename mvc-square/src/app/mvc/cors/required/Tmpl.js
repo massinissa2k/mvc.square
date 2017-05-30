@@ -19,15 +19,16 @@ var Tmpl = function() {
 			this.templatesList = templatesList;
 			this.templatesReady = {};
 			this.saveById = {};
-			this.next = next;
-			//this._echo_ 			= this._echoBind.bind( this );
+
 			this.htmlElementExistLength = 0;
 			this.htmlElementExtractedLength = 0;
 			this.htmlElementList = {};
 			htmlreplaceable = htmlreplaceable || "html" + _UTILS.uniqid();
 
 			this.loadTemplates(()=>{
-				this.buildTemplates();
+				this.buildTemplates(()=>{
+					next(true);	
+				});
 			});
 		}
 
@@ -35,24 +36,25 @@ var Tmpl = function() {
 			this.mvcController = mvcController;
 		}
 
-		buildTemplates(){
-			for (var J in this.templatesReady) {
-				this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
-			}
-
-			this.next(true);
+		buildTemplates(next){
+			setTimeout(()=>{
+				for (let J in this.templatesReady) {
+					this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
+				}
+				next();
+			},0)
 		}
 
 		loadTemplates(next){
 			let tmplValues = [];
 			let tmplKeys = [];
 			
-			for(var J in this.templatesList){
+			for(let J in this.templatesList){
 				tmplKeys.push(J);
 				tmplValues.push(this.templatesList[J]);
 			}
 
-			let files = new FilesLoader(tmplValues).load();
+			let files = new _UTILS.FilesLoader(tmplValues).load();
 			files.then((datas)=>{
 				
 				for(let data in datas){
@@ -64,14 +66,14 @@ var Tmpl = function() {
 		 			};
 				}
 
-				this.next();
+				next();
 			}).catch((why)=>{
 				DEBUG_WARN(why);
 			});
 		}
 
 		pushHtmlElement(elem){
-			var htmlId = "htmlreplace_" + (_UTILS.uid());
+			let htmlId = "htmlreplace_" + (_UTILS.uid());
 			this.htmlElementList[htmlId] = elem;
 			this.htmlElementExistLength++;
 			return htmlId;
@@ -101,7 +103,7 @@ var Tmpl = function() {
 
 		buildGet(id, str, data){
 			this.build(id, str);
-			return this.get(id, data);
+			return this._get(id, data);
 		}
 
 		execScript(id, data){
@@ -113,7 +115,7 @@ var Tmpl = function() {
 			return false;
 		}
 
-		get(id, data, concatBuffer){
+		_get(id, data, concatBuffer){
 			if (id === null && typeof(id) !== "undefined") {
 				DEBUG_WARN("Request template id");
 				return false;
@@ -123,7 +125,7 @@ var Tmpl = function() {
 		}
 
 		getFragment(id, data){
-			fragment.innerHTML = this.get(id, data);
+			fragment.innerHTML = this._get(id, data);
 			return fragment.children[0];
 		}
 
@@ -191,7 +193,7 @@ var Tmpl = function() {
 				fragment.innerHTML = this.getHiddenHtml(id, routeName);
 				htmlElement = fragment.childNodes[0];
 			} else {
-				fragment.innerHTML = this.get(id, data);
+				fragment.innerHTML = this._get(id, data);
 				htmlElement = fragment.children[0];
 				this.applyHtmlData(htmlElement);
 			}
@@ -248,7 +250,7 @@ var Tmpl = function() {
 				fragment.innerHTML = this.getHiddenHtml(id, routeName);
 				htmlElement = fragment.childNodes[0];
 			} else {
-				fragment.innerHTML = this.get(id, data);
+				fragment.innerHTML = this._get(id, data);
 				htmlElement = fragment.children[0];
 				this.applyHtmlData(htmlElement);
 			}

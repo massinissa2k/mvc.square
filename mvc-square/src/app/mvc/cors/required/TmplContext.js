@@ -4,7 +4,6 @@ var TmplContext = function(){
 		constructor(parent, plainText, _htmlreplaceable){
 			this.parent = parent;
 			htmlreplaceable = htmlreplaceable||_htmlreplaceable;
-			this.get = this.parent.get.bind(parent);
 
 			this.sharedContext = {}
 			this.sharedContext["_$_"] = {};
@@ -16,7 +15,7 @@ var TmplContext = function(){
 			this.sharedContext["templates"] = this.parent.templatesList;
 			this.sharedContext["mvc"] = mvc;
 			this.sharedContext["controllers"] = mvc.controllers;
-			this.sharedContext["get"] = this.parent.get.bind(parent);
+			this.sharedContext["get"] = this.parent._get.bind(parent);
 			this.sharedContext["getHtml"] = this.parent.getHtml.bind(parent);
 			this.sharedContext["goto"] = this.goto.bind(this);
 			this.sharedContext["echo"] = this.echo.bind(this);
