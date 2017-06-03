@@ -1,6 +1,5 @@
-controllers.MainView = function()
-{
-	class MainView extends controllers.Default{
+(() => {
+	class MainView extends mvc.controllers.Default{
 
 		onShow(tmpl, htmlElement, data, next) {
         	//debugger;
@@ -11,5 +10,5 @@ controllers.MainView = function()
         }
 	}
 
-	return MainView;
-}();
+	mvc.addController("MainView", MainView);
+})();

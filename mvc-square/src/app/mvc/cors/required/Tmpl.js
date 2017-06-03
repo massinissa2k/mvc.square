@@ -11,11 +11,11 @@ var Tmpl = function() {
 		}
 	})();
 
-	class Tmpl{
-		constructor(parent, templatesList, next){
+	class Tmpl {
+		constructor(parent, templatesList) {
 			this.parent = parent;
 			this.main = this.parent;
-			this.mvcController = null;
+			this.controller = null;
 			this.templatesList = templatesList;
 			this.templatesReady = {};
 			this.saveById = {};
@@ -23,70 +23,74 @@ var Tmpl = function() {
 			this.htmlElementExistLength = 0;
 			this.htmlElementExtractedLength = 0;
 			this.htmlElementList = {};
-			htmlreplaceable = htmlreplaceable || "html" + _UTILS.uniqid();
+			htmlreplaceable = htmlreplaceable || "html" + mvc.utils.uniqid();
+		}
 
-			this.loadTemplates(()=>{
-				this.buildTemplates(()=>{
-					next(true);	
+		init() {
+			return new Promise((resolve, reject) => {
+				this.loadTemplates(() => {
+					this.buildTemplates(() => {
+						resolve();
+					});
 				});
 			});
 		}
 
-		setMvcController(mvcController){
-			this.mvcController = mvcController;
+		setController(controller) {
+			this.controller = controller;
 		}
 
-		buildTemplates(next){
-			setTimeout(()=>{
+		buildTemplates(next) {
+			setTimeout(() => {
 				for (let J in this.templatesReady) {
 					this.build(this.templatesReady[J].id, this.templatesReady[J].tpl);
 				}
 				next();
-			},0)
+			}, 0)
 		}
 
-		loadTemplates(next){
+		loadTemplates(next) {
 			let tmplValues = [];
 			let tmplKeys = [];
-			
-			for(let J in this.templatesList){
+
+			for (let J in this.templatesList) {
 				tmplKeys.push(J);
 				tmplValues.push(this.templatesList[J]);
 			}
 
-			let files = new _UTILS.FilesLoader(tmplValues).load();
-			files.then((datas)=>{
-				
-				for(let data in datas){
+			let files = new mvc.utils.FilesLoader(tmplValues).load();
+			files.then((datas) => {
+
+				for (let data in datas) {
 					let val = datas[data];
 					this.templatesReady[tmplKeys[tmplValues.indexOf(val[0])]] = {
-		 				id: tmplKeys[tmplValues.indexOf(val[0])],
-		 				url: val[0],
-		 				tpl: val[1]
-		 			};
+						id: tmplKeys[tmplValues.indexOf(val[0])],
+						url: val[0],
+						tpl: val[1]
+					};
 				}
 
 				next();
-			}).catch((why)=>{
+			}).catch((why) => {
 				DEBUG_WARN(why);
 			});
 		}
 
-		pushHtmlElement(elem){
-			let htmlId = "htmlreplace_" + (_UTILS.uid());
+		pushHtmlElement(elem) {
+			let htmlId = "htmlreplace_" + (mvc.utils.uid());
 			this.htmlElementList[htmlId] = elem;
 			this.htmlElementExistLength++;
 			return htmlId;
 		}
 
-		extractHtmlElement(id){
+		extractHtmlElement(id) {
 			var elem = null;
 			elem = this.htmlElementList[id];
 			this.htmlElementList[id] = null;
 			return elem;
 		}
 
-		build(id, str, rebuild){
+		build(id, str, rebuild) {
 
 			if (id === null && typeof(id) !== "undefined") {
 				DEBUG_WARN("Request template id");
@@ -101,12 +105,12 @@ var Tmpl = function() {
 			return true;
 		}
 
-		buildGet(id, str, data){
+		buildGet(id, str, data) {
 			this.build(id, str);
 			return this._get(id, data);
 		}
 
-		execScript(id, data){
+		execScript(id, data) {
 			if (typeof(this.saveById[id]) === "function") {
 				return this.saveById[id](data);
 			}
@@ -115,7 +119,7 @@ var Tmpl = function() {
 			return false;
 		}
 
-		_get(id, data, concatBuffer){
+		_get(id, data, concatBuffer) {
 			if (id === null && typeof(id) !== "undefined") {
 				DEBUG_WARN("Request template id");
 				return false;
@@ -124,12 +128,12 @@ var Tmpl = function() {
 			return this.execScript(id, data);
 		}
 
-		getFragment(id, data){
+		getFragment(id, data) {
 			fragment.innerHTML = this._get(id, data);
 			return fragment.children[0];
 		}
 
-		getHtmlFromFragment(htmlElement){
+		getHtmlFromFragment(htmlElement) {
 			var htmlreplaceableElems = null;
 			var i = 0;
 			var L = 0;
@@ -149,7 +153,7 @@ var Tmpl = function() {
 		}
 
 		//befor onApplyHtmlData ??
-		applyHtmlData(htmlElement){
+		applyHtmlData(htmlElement) {
 			var htmlreplaceableElems = null;
 			var i = 0;
 			var L = 0;
@@ -168,27 +172,27 @@ var Tmpl = function() {
 			return htmlElement;
 		}
 
-		showViewHtml(echoElement, htmlElement){
+		showViewHtml(echoElement, htmlElement) {
 			if (echoElement.parentElement !== null) {
 				echoElement.parentElement.replaceChild(htmlElement, echoElement);
 			}
 		}
 
-		getHiddenHtml(id, routeName){
+		getHiddenHtml(id, routeName) {
 			//return "<span tmplid='"+id+"' style='display:none!important' ></span>";
 			return hiddenHtml;
 		}
 
-		getEchoHidden(id, routeName){
+		getEchoHidden(id, routeName) {
 			//return "<span tmplid='"+id+"' style='display:none!important' ></span>";
 			//return "<!---->";
 			return hiddenHtml;
 		}
 
-		getHtmlNext(id, data, echoElement, ct, routeName){
+		getHtmlNext(id, data, echoElement, ct, routeName) {
 			var htmlElement = null;
 			var fragment = document.createElement("div");
-			
+
 			if (id === null) {
 				fragment.innerHTML = this.getHiddenHtml(id, routeName);
 				htmlElement = fragment.childNodes[0];
@@ -198,13 +202,13 @@ var Tmpl = function() {
 				this.applyHtmlData(htmlElement);
 			}
 
-			//this.mvcController.onShow( ct , echoElement , htmlElement , data , this.showViewHtml.bind( this , echoElement , htmlElement ) );
+			//this.controller.onShow( ct , echoElement , htmlElement , data , this.showViewHtml.bind( this , echoElement , htmlElement ) );
 			ct.beforeShow(echoElement, htmlElement, data, this.showViewHtml.bind(this, echoElement, htmlElement));
 
 			return htmlElement;
 		}
 
-		getHtml(id_or_object, data, controllerClass, routeName, returnController){
+		getHtml(id_or_object, data, controllerClass, routeName, returnController) {
 			var echoElement = null;
 			var htmlElement = null;
 			var id = id_or_object;
@@ -224,7 +228,7 @@ var Tmpl = function() {
 					DEBUG_WARN("Default controller used for : templates[ " + id + " ], perhaps it's normal !?");
 				}
 
-				controllerClass = this.mvcController.controllers.Default;
+				controllerClass = this.controller.controllers.Default;
 			}
 
 			if (typeof(controllerClass) === "function") {
@@ -233,7 +237,7 @@ var Tmpl = function() {
 				//echoElement 		= fragment.children[0];
 				echoElement = fragment.childNodes[0];
 
-				controller = this.mvcController.createController(controllerClass, routeName);
+				controller = this.controller.createController(controllerClass, routeName);
 				controller.__init__(
 					echoElement, data, this.getHtmlNext.bind(this, id, data, echoElement, controller, routeName)
 				);

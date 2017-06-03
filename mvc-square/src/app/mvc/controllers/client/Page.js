@@ -1,5 +1,6 @@
-controllers.Page = function() {
-	class Page extends controllers.Default {
+(() => {
+
+	class Page extends mvc.controllers.Default {
 
 		constructor( parent , tmplEngine ){
 			super();
@@ -26,5 +27,6 @@ controllers.Page = function() {
         onSwapViewIn(){
         }
 	}
-	return Page;
-}();
+
+	mvc.addController("Page", Page);
+})();

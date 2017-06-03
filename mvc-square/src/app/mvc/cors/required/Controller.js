@@ -11,7 +11,7 @@ var Controller = function() {
 
 			if (this.parent instanceof(MainMvc) === false) {
 				this.isMain = false;
-				DEBUG_WARN("is not MainMvc");
+				DEBUG_WARN("it's not MainMvc");
 			} else {
 				this.mainMvc = this.parent;
 			}

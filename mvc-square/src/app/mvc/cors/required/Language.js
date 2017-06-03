@@ -8,11 +8,13 @@ var Language = function() {
 			this.defaultLng = this.configLng.default;
 			this.currentLng = this.defaultLng;
 			this.availableLng = this.configLng.available;
-
-			this.onLngReadyObj = new CustomEvent(_CONST.LNG.ready);
-
 			this.switchLng();
-			this.loadFile();
+		}
+
+		init(){
+			return new Promise((resolve, reject)=>{
+				this.loadFile(resolve, reject);
+			});
 		}
 
 		switchLng(){
@@ -23,7 +25,7 @@ var Language = function() {
 		}
 
 		setFromQueryUrl(){
-			this.currentLng = _UTILS.getUrlQueryByName(_CONST.LNG.urlKey) || this.defaultLng;
+			this.currentLng = mvc.utils.getUrlQueryByName(_CONST.LNG.urlKey) || this.defaultLng;
 		}
 
 		isAvailableLng() {
@@ -34,16 +36,17 @@ var Language = function() {
 			return true;
 		}
 
-		loadFile(){
-			_UTILS.loadFile("json", this.configLng.dirPath + "/" + this.currentLng + this.configLng.format, this.lngReady.bind(this));
+		loadFile(resolve, reject){
+			mvc.utils.loadFile("json", this.configLng.dirPath + "/" + this.currentLng + this.configLng.format, this.lngReady.bind(this, resolve, reject));
 		}
 
-		lngReady(data){
+		lngReady(resolve, reject, data){
+			if(!data){
+				reject();
+				return;
+			}
 			this.data = data;
-			this.onLngReadyObj.data = {
-				"lng": this.getLngByName.bind(this)
-			};
-			window.dispatchEvent(this.onLngReadyObj);
+			resolve();
 		}
 
 		getLngByName(name) {

@@ -1,5 +1,4 @@
-body
-{
+body {
 	/*font-size: 0;*/
 	-webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -9,20 +8,17 @@ body
 }
 
 tpl_replace,
-echo_replace
-{
+echo_replace {
 	display:none!important;
 }
 
-.v-align-m
-{
+.v-align-m {
 	vertical-align: middle;
 	width: 0;
 	height: 100%;
 	display: inline-block;
 }
 
-[cursor="pointer"]
-{
+[cursor="pointer"] {
 	cursor: pointer;
 }

@@ -1,4 +1,4 @@
-controllers.DefaultController = controllers.Default = function() {
+mvc.controllers.DefaultController = mvc.controllers.Default = function() {
 
 	function setEventsObject(ctx){
 		ctx.evtOnCreate = {
@@ -56,7 +56,7 @@ controllers.DefaultController = controllers.Default = function() {
 		}
 
 		beforeInit(){
-			this.ctId = this.ctId || _UTILS.uniqid();
+			this.ctId = this.ctId || mvc.utils.uniqid();
 		}
 
 		beforeCreate(templateElement, data, next){

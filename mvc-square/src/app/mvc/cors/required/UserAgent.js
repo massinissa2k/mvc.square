@@ -52,9 +52,9 @@ var UserAgent = function() {
 		constructor(){
 			this.userAgent = userAgent;
 			this.constructObject();
-			_CONFIG.device.type = this.userAgent.device.type;
-			_CONFIG.device.os = this.userAgent.os.name;
-			_CONFIG.device.getCurrentOs = "&os=" + this.userAgent.os.name;
+			mvc.config.device.type = this.userAgent.device.type;
+			mvc.config.device.os = this.userAgent.os.name;
+			mvc.config.device.getCurrentOs = "&os=" + this.userAgent.os.name;
 		}
 
 		iOSVersion(){
@@ -140,7 +140,7 @@ var UserAgent = function() {
 			var L = classListe.length;
 
 			for (; i < L; i++) {
-				_UTILS.classManager(html, classListe[i], "");
+				mvc.utils.classManager(html, classListe[i], "");
 			}
 		}
 	}

@@ -1,21 +1,21 @@
 (function() {
 	"use strict";
-	var __GLOBALS__ = {};
-	var _CONFIG = null;
-	var _UTILS, Utils, nsUtils;
-	_UTILS = Utils = nsUtils = {};
-	var controllers = {};
-	var models = {};
 	var mvc = {
-		config: _CONFIG,
+		config: null,
 		mainMvc: null,
-		utils: _UTILS,
-		controllers: controllers,
-		models: models,
+		utils: {},
+		controllers: {},
+		models: {},
 		routes: null,
 		model: null,
-		lng: null,//default access to get the traduction by key, that can be changed from const.js
+		lng: null, //default access to get the traduction by key, that can be changed from const.js
 		userAgent: null,
+		addModel: (cName, model) => {
+			mvc.models[cName] = model;
+		},
+		addController: (cName, ct) => {
+			mvc.controllers[cName] = ct;
+		}
 	};
 
 	var getWinMvc = function() {

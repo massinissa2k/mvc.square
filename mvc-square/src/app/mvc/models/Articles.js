@@ -1,5 +1,5 @@
-models.Article = function() {
-	
+(function() {
+
 	class Article extends Model{
 		constructor(parent){
 			super();
@@ -7,5 +7,6 @@ models.Article = function() {
 		}
 	}
 
-	return Article;
-}();
+	mvc.addModel(Article);
+
+})();

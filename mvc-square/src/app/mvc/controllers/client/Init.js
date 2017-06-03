@@ -1,5 +1,5 @@
-controllers.Init = function() {
-	class Init extends controllers.Default {
+(() => {
+	class Init extends mvc.controllers.Default {
 
 		constructor( parent , tmplEngine ){
 			super();
@@ -13,5 +13,5 @@ controllers.Init = function() {
 			//return false;
 		}
 	}
-	return Init;
-}();
+	mvc.addController("Init", Init);
+})();
