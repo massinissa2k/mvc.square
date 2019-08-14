@@ -71,9 +71,9 @@ const toWatchDevScss = [
 
 const toWatchDev = [
 	config.ARBO.src.appDir + "index.html",
-	toWatchDevScss,
-	config.ARBO.src.templatesJst,
-	toWatchJSDev,
+	...toWatchDevScss,
+	...config.ARBO.src.templatesJst,
+	...toWatchJSDev,
 ];
 
 gulp.task("switchToProd", (done) => {

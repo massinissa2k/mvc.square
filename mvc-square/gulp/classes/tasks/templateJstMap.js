@@ -23,7 +23,7 @@ var initTask = function(taskArgs) {
 				var find = "\\" + path.sep;
 				var re = new RegExp(find, 'g');
 				currSrc = currSrc.replace(re, "/");
-
+				currSrc = currSrc.replace(/^\//g, "");
 				uriSpliced = currSrc.split("/");
 				dPathArrL = uriSpliced.length;
 
