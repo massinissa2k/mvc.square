@@ -12,6 +12,10 @@ var mainRoutes =
 			onGet 			: [ "page" ]
 			,controller 	: "Page"
 			,template 		: "client/page"
+		},{
+			onGet 			: [ "page2" ]
+			,controller 	: "Page2"
+			,template 		: "client/page2"
 		}
 	]
 };
