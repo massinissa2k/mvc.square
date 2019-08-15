@@ -2,7 +2,7 @@
 
 	class Page extends mvc.controllers.Default {
 
-		constructor( parent , tmplEngine ){
+		constructor(parent, tmplEngine) {
 			super();
 			this.parent = parent;
 			this.tmplEngine = tmplEngine;
@@ -14,10 +14,12 @@
 		}
 
 		onShow(tmpl, htmlElement, data, next) {
-        }
+			//setTimeout(next);
+			//return false;
+		}
 
-        onSwapViewIn(){
-        }
+		onSwapViewIn() {
+		}
 	}
 
 	mvc.addController("Page", Page);

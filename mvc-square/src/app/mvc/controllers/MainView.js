@@ -1,13 +1,13 @@
 (() => {
-	class MainView extends mvc.controllers.Default{
+	class MainView extends mvc.controllers.Default {
 
 		onShow(tmpl, htmlElement, data, next) {
-        	//debugger;
-        }
+			//debugger;
+		}
 
-        onSwapViewIn(){
-        	//debugger;
-        }
+		onSwapViewIn() {
+			//debugger;
+		}
 	}
 
 	mvc.addController("MainView", MainView);
