@@ -1,3 +1,4 @@
 *.DS_Store
 mvc-square/dist/*
 mvc-square/gulp/node_modules/*
+deep.square.ts/node_modules/*
